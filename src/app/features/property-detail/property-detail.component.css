@@ -1,0 +1,15 @@
+.detail-skeleton {
+  animation: detail-shimmer 1.35s infinite;
+  background: linear-gradient(90deg, #eef2ef 0%, #f8faf8 45%, #e8eee9 100%);
+  background-size: 220% 100%;
+}
+
+@keyframes detail-shimmer {
+  0% {
+    background-position: 120% 0;
+  }
+
+  100% {
+    background-position: -120% 0;
+  }
+}
