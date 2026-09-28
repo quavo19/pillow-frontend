@@ -1,0 +1,241 @@
+<main class="min-h-screen bg-white px-4 py-6 text-slate-950 sm:px-6 lg:py-8">
+  @if (isLoading) {
+    <div class="mx-auto max-w-7xl">
+      <div class="detail-skeleton h-6 w-40"></div>
+
+      <div class="mb-8 mt-8 flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+        <div class="w-full max-w-xl">
+          <div class="detail-skeleton h-12 w-3/4"></div>
+          <div class="detail-skeleton mt-4 h-5 w-2/3"></div>
+        </div>
+        <div class="w-full max-w-xs">
+          <div class="detail-skeleton h-9 w-40"></div>
+          <div class="detail-skeleton mt-2 h-4 w-24"></div>
+          <div class="detail-skeleton mt-5 h-14 w-full"></div>
+        </div>
+      </div>
+
+      <div class="grid gap-7 lg:grid-cols-[2fr_1fr]">
+        <div class="detail-skeleton h-[360px] w-full sm:h-[460px]"></div>
+        <div class="grid gap-6">
+          <div class="detail-skeleton h-52 w-full"></div>
+          <div class="detail-skeleton h-52 w-full"></div>
+        </div>
+      </div>
+
+      <div class="mt-10 grid gap-7 lg:grid-cols-[2fr_1fr]">
+        <div>
+          <div class="grid gap-7 sm:grid-cols-3">
+            @for (item of [1, 2, 3]; track item) {
+              <div>
+                <div class="detail-skeleton h-4 w-20"></div>
+                <div class="detail-skeleton mt-3 h-6 w-24"></div>
+              </div>
+            }
+          </div>
+          <div class="mt-12 max-w-3xl">
+            <div class="detail-skeleton h-8 w-48"></div>
+            <div class="detail-skeleton mt-5 h-4 w-full"></div>
+            <div class="detail-skeleton mt-3 h-4 w-11/12"></div>
+            <div class="detail-skeleton mt-3 h-4 w-4/5"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  } @else if (property) {
+    <div class="mx-auto max-w-7xl">
+      <button class="mb-6 inline-flex items-center gap-2 font-semibold text-emerald-600" type="button" (click)="goBack()">
+        <i class="bi bi-chevron-left"></i>
+        Back to properties
+      </button>
+
+      <div class="mb-8 flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+        <div>
+          <h1 class="text-4xl font-extrabold tracking-normal sm:text-5xl">{{ property.name }}</h1>
+          <p class="mt-4 text-lg text-slate-500">{{ property.address }}</p>
+        </div>
+        <div class="w-full max-w-xs lg:text-right">
+          <p class="text-sm text-slate-500">Rent price</p>
+          <p class="mt-2 text-2xl font-extrabold text-emerald-600">{{ formatPrice(property.price) }}</p>
+          <p class="mt-1 text-sm font-medium text-slate-400">per month</p>
+          <button class="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-emerald-600 px-6 py-4 font-extrabold text-white shadow-lg shadow-emerald-600/20 transition hover:bg-emerald-700" type="button" (click)="openContact()">
+            <i class="bi bi-chat-dots"></i>
+            Contact
+          </button>
+        </div>
+      </div>
+
+      <div class="lg:grid lg:gap-7 lg:grid-cols-[2fr_1fr]">
+        <div class="-mx-4 flex gap-4 overflow-x-auto px-4 pb-2 sm:mx-0 sm:px-0 lg:contents">
+          <img class="hidden h-[460px] w-full rounded-lg object-cover lg:col-start-1 lg:row-span-3 lg:block" [src]="selectedImage" [alt]="property.name" />
+          <div class="contents lg:grid lg:gap-6">
+            @for (image of allImages; track image) {
+              <button class="block shrink-0 text-left" type="button" (click)="selectImage(image)">
+                <img
+                  class="h-72 w-[86vw] rounded-lg object-cover sm:h-52 sm:w-full lg:hidden"
+                  [class.border-2]="image === selectedImage"
+                  [class.border-emerald-600]="image === selectedImage"
+                  [class.p-1]="image === selectedImage"
+                  [src]="image"
+                  [alt]="property.name"
+                />
+              </button>
+            }
+            @for (image of allImages.slice(0, 2); track image; let isLast = $last) {
+              <div class="relative hidden lg:block">
+                <button class="block w-full text-left" type="button" (click)="selectImage(image)">
+                  <img
+                    class="h-[218px] w-full rounded-lg object-cover"
+                    [class.border-2]="image === selectedImage"
+                    [class.border-emerald-600]="image === selectedImage"
+                    [class.p-1]="image === selectedImage"
+                    [src]="image"
+                    [alt]="property.name"
+                  />
+                </button>
+                @if (isLast && allImages.length > 2) {
+                  <button class="absolute bottom-5 right-5 inline-flex items-center gap-2 bg-white px-5 py-3 font-bold text-slate-950 shadow-xl transition hover:bg-slate-100" type="button" (click)="openGallery()">
+                    <i class="bi bi-images text-emerald-600"></i>
+                    See more photos
+                  </button>
+                }
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-10">
+        <div class="grid gap-7 sm:grid-cols-3">
+          <div class="flex items-center gap-4">
+            <span class="grid size-11 place-items-center rounded-full bg-emerald-50 text-xl text-emerald-700"><i class="bi bi-door-open"></i></span>
+            <div>
+              <p class="text-sm text-slate-500">Bedrooms</p>
+              <p class="mt-1 text-lg font-extrabold">{{ property.beds }}</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-4">
+            <span class="grid size-11 place-items-center rounded-full bg-emerald-50 text-xl text-emerald-700"><i class="bi bi-droplet"></i></span>
+            <div>
+              <p class="text-sm text-slate-500">Bathrooms</p>
+              <p class="mt-1 text-lg font-extrabold">{{ property.baths }}</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-4">
+            <span class="grid size-11 place-items-center rounded-full bg-emerald-50 text-xl text-emerald-700"><i class="bi bi-bounding-box"></i></span>
+            <div>
+              <p class="text-sm text-slate-500">Square Area</p>
+              <p class="mt-1 text-lg font-extrabold">{{ property.area }}</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-16 max-w-3xl">
+          <h2 class="text-2xl font-extrabold">About this home</h2>
+          <p class="mt-4 leading-8 text-slate-600">{{ property.description }}</p>
+        </div>
+      </div>
+
+      @if (isContactOpen) {
+        <div class="fixed inset-0 z-50 grid place-items-center bg-slate-950/60 p-3 backdrop-blur-sm" role="dialog" aria-modal="true">
+          <button class="absolute inset-0 cursor-default" type="button" aria-label="Close contact form" (click)="closeContact()"></button>
+
+          <section class="relative w-full max-w-lg bg-white p-5 shadow-2xl sm:p-7">
+            <button class="absolute right-3 top-3 grid size-9 place-items-center bg-slate-100 text-slate-700 transition hover:bg-slate-200" type="button" aria-label="Close" (click)="closeContact()">
+              <i class="bi bi-x-lg"></i>
+            </button>
+
+            <div class="pr-10">
+              <p class="text-sm font-semibold uppercase tracking-wide text-emerald-700">Contact</p>
+            </div>
+
+            <form class="mt-4 grid gap-4">
+              <label class="block">
+                <span class="text-sm font-semibold text-slate-700">Name</span>
+                <input class="mt-2 w-full border border-slate-200 px-4 py-3 outline-none transition focus:border-emerald-500" type="text" placeholder="Your name" />
+              </label>
+              <label class="block">
+                <span class="text-sm font-semibold text-slate-700">Phone number</span>
+                <input class="mt-2 w-full border border-slate-200 px-4 py-3 outline-none transition focus:border-emerald-500" type="tel" placeholder="+233 24 000 0000" />
+              </label>
+              <label class="block">
+                <span class="text-sm font-semibold text-slate-700">Message <span class="font-normal text-slate-400">(optional)</span></span>
+                <textarea class="mt-2 min-h-28 w-full border border-slate-200 px-4 py-3 outline-none transition focus:border-emerald-500" placeholder="Preferred viewing time or any question."></textarea>
+              </label>
+              <button class="inline-flex w-fit items-center gap-2 bg-emerald-600 px-7 py-3 font-bold text-white shadow-lg shadow-emerald-600/20 transition hover:bg-emerald-700" type="button">
+                <i class="bi bi-send"></i>
+                Send request
+              </button>
+            </form>
+          </section>
+        </div>
+      }
+
+      @if (isGalleryOpen) {
+        <div class="fixed inset-0 z-50 overflow-y-auto bg-slate-950/80 p-3 backdrop-blur-sm sm:p-4" role="dialog" aria-modal="true">
+          <button class="fixed inset-0 cursor-default" type="button" aria-label="Close gallery" (click)="closeGallery()"></button>
+
+          <section class="relative mx-auto my-4 w-full max-w-6xl bg-white p-3 shadow-2xl sm:my-6 sm:p-5">
+            <div class="mb-5 flex items-center justify-between gap-4">
+              <div>
+                <p class="text-sm font-semibold uppercase tracking-wide text-emerald-700">Photos</p>
+                <h2 class="mt-1 text-2xl font-extrabold">{{ property.name }}</h2>
+              </div>
+              <button class="grid size-10 place-items-center bg-slate-100 text-slate-700 transition hover:bg-slate-200" type="button" aria-label="Close gallery" (click)="closeGallery()">
+                <i class="bi bi-x-lg"></i>
+              </button>
+            </div>
+
+            <div class="relative bg-slate-100">
+              <img class="h-[58vh] max-h-[620px] min-h-[320px] w-full object-cover" [src]="selectedImage" [alt]="property.name" />
+
+              <button
+                class="absolute left-3 top-1/2 grid size-11 -translate-y-1/2 place-items-center bg-white/95 text-xl text-slate-950 shadow-xl transition hover:bg-white sm:left-5 sm:size-12"
+                type="button"
+                aria-label="Previous photo"
+                (click)="navigateGallery('previous')"
+              >
+                <i class="bi bi-chevron-left"></i>
+              </button>
+              <button
+                class="absolute right-3 top-1/2 grid size-11 -translate-y-1/2 place-items-center bg-white/95 text-xl text-slate-950 shadow-xl transition hover:bg-white sm:right-5 sm:size-12"
+                type="button"
+                aria-label="Next photo"
+                (click)="navigateGallery('next')"
+              >
+                <i class="bi bi-chevron-right"></i>
+              </button>
+
+              <div class="absolute bottom-3 right-3 bg-slate-950/75 px-3 py-1.5 text-sm font-semibold text-white sm:bottom-5 sm:right-5">
+                {{ selectedImageIndex + 1 }} / {{ allImages.length }}
+              </div>
+            </div>
+
+            <div class="-mx-3 mt-4 flex gap-3 overflow-x-auto px-3 pb-1 sm:mx-0 sm:px-0">
+              @for (image of allImages; track image) {
+                <button class="block shrink-0 text-left" type="button" (click)="selectImage(image)">
+                  <img
+                    class="h-24 w-36 object-cover sm:h-28 sm:w-44"
+                    [class.border-2]="image === selectedImage"
+                    [class.border-emerald-600]="image === selectedImage"
+                    [class.p-1]="image === selectedImage"
+                    [src]="image"
+                    [alt]="property.name"
+                  />
+                </button>
+              }
+            </div>
+          </section>
+        </div>
+      }
+    </div>
+  } @else {
+    <div class="mx-auto grid min-h-[70vh] max-w-xl place-items-center text-center">
+      <div>
+        <h1 class="text-3xl font-extrabold">Property not found</h1>
+        <p class="mt-3 text-slate-500">This listing may have moved or is no longer available.</p>
+        <a class="mt-6 inline-flex bg-emerald-600 px-6 py-3 font-bold text-white" routerLink="/">Back to rentals</a>
+      </div>
+    </div>
+  }
+</main>
