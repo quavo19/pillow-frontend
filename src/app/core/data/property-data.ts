@@ -1,0 +1,161 @@
+import { PropertyListing } from '../models/property-listing';
+
+export const searchFilters = [
+  { label: 'Location', value: 'New York, USA', icon: 'bi-geo-alt' },
+  { label: 'When', value: 'Select Move-in Date', icon: 'bi-calendar3' },
+  { label: 'Price', value: 'GH₵500-GH₵2,500', icon: 'bi-chevron-down' },
+  { label: 'Property Type', value: 'Houses', icon: 'bi-house-door' },
+];
+
+export const properties: PropertyListing[] = [
+  {
+    slug: 'palm-harbor',
+    name: 'Palm Harbor',
+    address: '2699 Green Valley, Highland Lake, FL',
+    region: 'Greater Accra',
+    price: 2095,
+    beds: 3,
+    baths: 2,
+    area: '5x7 m2',
+    image: 'https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&fit=crop&w=1000&q=85',
+    gallery: [
+      'https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?auto=format&fit=crop&w=900&q=85',
+      'https://images.unsplash.com/photo-1600566752355-35792bedcfea?auto=format&fit=crop&w=900&q=85',
+    ],
+    popular: true,
+    description:
+      'A calm family home with generous natural light, a practical kitchen, and a leafy yard made for slow weekends. The neighborhood is quiet, close to parks, and easy to reach from the main road.',
+    stats: [
+      { label: 'Bedrooms', value: '3' },
+      { label: 'Bathrooms', value: '2' },
+      { label: 'Square Area', value: '5x7 m2' },
+      { label: 'Repair Quality', value: 'Modern Loft' },
+      { label: 'Status', value: 'Active' },
+    ],
+  },
+  {
+    slug: 'beverly-springfield',
+    name: 'Beverly Springfield',
+    address: '2821 Lake Sevilla, Palm Harbor, TX',
+    region: 'Ashanti',
+    price: 2700,
+    beds: 4,
+    baths: 2,
+    area: '6x7.5 m2',
+    image: 'https://images.unsplash.com/photo-1605276374104-dee2a0ed3cd6?auto=format&fit=crop&w=1000&q=85',
+    gallery: [
+      'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=900&q=85',
+      'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=900&q=85',
+    ],
+    popular: true,
+    description:
+      'This bright suburban rental pairs a broad driveway with refreshed interiors, flexible bedrooms, and an open living area that keeps daily routines simple.',
+    stats: [
+      { label: 'Bedrooms', value: '4' },
+      { label: 'Bathrooms', value: '2' },
+      { label: 'Square Area', value: '6x7.5 m2' },
+      { label: 'Repair Quality', value: 'Renovated' },
+      { label: 'Status', value: 'Active' },
+    ],
+  },
+  {
+    slug: 'faulkner-ave',
+    name: 'Faulkner Ave',
+    address: '909 Woodland St, Michigan, IN',
+    region: 'Northern',
+    price: 4550,
+    beds: 4,
+    baths: 3,
+    area: '8x10 m2',
+    image: 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1000&q=85',
+    gallery: [
+      'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=900&q=85',
+      'https://images.unsplash.com/photo-1600210491369-e753d80a41f3?auto=format&fit=crop&w=900&q=85',
+    ],
+    popular: true,
+    description:
+      'A modern residence with crisp architecture, evening-ready lighting, and room for entertaining. It is polished without feeling precious.',
+    stats: [
+      { label: 'Bedrooms', value: '4' },
+      { label: 'Bathrooms', value: '3' },
+      { label: 'Square Area', value: '8x10 m2' },
+      { label: 'Repair Quality', value: 'Premium' },
+      { label: 'Status', value: 'Active' },
+    ],
+  },
+  {
+    slug: 'st-crystal',
+    name: 'St. Crystal',
+    address: '210 US Highway, Highland Lake, FL',
+    region: 'Upper East',
+    price: 2400,
+    beds: 4,
+    baths: 2,
+    area: '6x8 m2',
+    image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1000&q=85',
+    gallery: [
+      'https://images.unsplash.com/photo-1600210491892-03d54c0aaf87?auto=format&fit=crop&w=900&q=85',
+      'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=900&q=85',
+    ],
+    popular: false,
+    description:
+      'St. Crystal is a composed, move-in-ready home with a warm facade, a clean interior palette, and balanced spaces for working, resting, and hosting.',
+    stats: [
+      { label: 'Bedrooms', value: '4' },
+      { label: 'Bathrooms', value: '2' },
+      { label: 'Square Area', value: '6x8 m2' },
+      { label: 'Repair Quality', value: 'Modern Loft' },
+      { label: 'Status', value: 'Active' },
+    ],
+  },
+  {
+    slug: 'cedar-grove',
+    name: 'Cedar Grove',
+    address: '114 Ridge Lane, Austin, TX',
+    region: 'Central',
+    price: 3150,
+    beds: 3,
+    baths: 3,
+    area: '7x8 m2',
+    image: 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=1000&q=85',
+    gallery: [
+      'https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=900&q=85',
+      'https://images.unsplash.com/photo-1600607688960-e095ff83135c?auto=format&fit=crop&w=900&q=85',
+    ],
+    popular: false,
+    description:
+      'A welcoming home with porch character, updated fixtures, and enough separation between rooms to make shared living feel easy.',
+    stats: [
+      { label: 'Bedrooms', value: '3' },
+      { label: 'Bathrooms', value: '3' },
+      { label: 'Square Area', value: '7x8 m2' },
+      { label: 'Repair Quality', value: 'Classic' },
+      { label: 'Status', value: 'Active' },
+    ],
+  },
+  {
+    slug: 'rosewood-place',
+    name: 'Rosewood Place',
+    address: '73 Morning View, Denver, CO',
+    region: 'Volta',
+    price: 3680,
+    beds: 5,
+    baths: 3,
+    area: '9x10 m2',
+    image: 'https://images.unsplash.com/photo-1605146769289-440113cc3d00?auto=format&fit=crop&w=1000&q=85',
+    gallery: [
+      'https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=900&q=85',
+      'https://images.unsplash.com/photo-1600566752734-2a0ef31b5f3b?auto=format&fit=crop&w=900&q=85',
+    ],
+    popular: false,
+    description:
+      'A spacious retreat with stone detailing, generous bedrooms, and a comfortable connection to the outdoors.',
+    stats: [
+      { label: 'Bedrooms', value: '5' },
+      { label: 'Bathrooms', value: '3' },
+      { label: 'Square Area', value: '9x10 m2' },
+      { label: 'Repair Quality', value: 'Updated' },
+      { label: 'Status', value: 'Active' },
+    ],
+  },
+];
