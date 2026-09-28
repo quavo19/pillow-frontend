@@ -1,0 +1,521 @@
+<main class="min-h-screen bg-[#f4f8f4] text-slate-950">
+  <section class="bg-[#f3f3f1] px-3 pb-6 pt-5 md:hidden" id="home">
+    <header class="flex items-center justify-between">
+      <a class="grid size-10 place-items-center bg-slate-950" href="#home" (click)="handleNav('home')">
+        <img class="size-8 object-contain brightness-0 invert" src="images/logo.png" alt="Pillow logo" />
+      </a>
+      <div class="flex items-center gap-2.5">
+        <h1 class="font-serif text-2xl font-semibold italic leading-none tracking-normal">Explore</h1>
+        <button
+          class="flex size-9 flex-col justify-center gap-1.5 transition"
+          [class.items-start]="isMobileMenuOpen"
+          [class.items-end]="!isMobileMenuOpen"
+          type="button"
+          aria-label="Open menu"
+          (click)="toggleMobileMenu()"
+        >
+          <span class="h-0.5 bg-slate-950 transition-all" [class.w-5]="isMobileMenuOpen" [class.w-7]="!isMobileMenuOpen"></span>
+          <span class="h-0.5 bg-slate-950 transition-all" [class.w-7]="isMobileMenuOpen" [class.w-4]="!isMobileMenuOpen"></span>
+          <span class="h-0.5 bg-slate-950 transition-all" [class.w-4]="isMobileMenuOpen" [class.w-6]="!isMobileMenuOpen"></span>
+        </button>
+      </div>
+    </header>
+
+    @if (isMobileMenuOpen) {
+      <div class="fixed left-3 right-3 top-16 z-50 rounded-2xl border border-white/20 bg-slate-950/95 p-3 shadow-2xl backdrop-blur md:hidden">
+        @for (item of mobileNavItems; track item.action) {
+          <button
+            class="flex w-full items-center justify-between rounded-xl px-4 py-3 text-left text-base font-medium transition"
+            [class.bg-white]="isNavActive(item.action)"
+            [class.text-slate-950]="isNavActive(item.action)"
+            [class.text-white]="!isNavActive(item.action)"
+            type="button"
+            (click)="handleNav(item.action)"
+          >
+            {{ item.label }}
+            @if (item.action === 'contact') {
+              <i class="bi bi-telephone"></i>
+            }
+            @if (item.action === 'list') {
+              <img class="size-5" [class.invert]="!isNavActive(item.action)" src="svgs/Home.svg" alt="" />
+            }
+          </button>
+        }
+        <a class="mt-2 flex items-center gap-2 rounded-xl px-4 py-3 text-sm font-medium text-white/90" href="tel:+233241234567">
+          <i class="bi bi-telephone"></i>
+          +233 24 123 4567
+        </a>
+      </div>
+    }
+
+    <div class="mt-4 flex items-center gap-2 rounded-full bg-white p-1.5">
+      <div class="flex min-w-0 flex-1 items-center gap-2.5 px-3">
+        <img class="size-6 shrink-0" src="svgs/Search.svg" alt="" />
+        <input class="w-full bg-transparent text-sm outline-none placeholder:text-slate-400" type="search" placeholder="Search location" />
+      </div>
+      <button class="grid size-10 shrink-0 place-items-center rounded-full bg-[#f0f0ee] text-lg" type="button" aria-label="Filters" (click)="openFilters()">
+        <i class="bi bi-sliders2"></i>
+      </button>
+    </div>
+
+    <div class="mt-5">
+      <h2 class="text-xl font-medium">Offers</h2>
+    </div>
+
+    <div class="mt-3 grid gap-5">
+      @for (property of filteredProperties; track property.slug) {
+        <article class="overflow-hidden rounded-[26px] bg-white">
+          <button class="block w-full text-left" type="button" (click)="openProperty(property.slug)">
+            <div class="skeleton-surface relative mx-3 mt-3 h-56 overflow-hidden rounded-[22px] bg-[#eee9e2]">
+              <img class="relative z-10 h-full w-full object-cover" [src]="property.image" [alt]="property.name" />
+            </div>
+
+            <div class="p-4">
+              <div class="flex items-start justify-between gap-3">
+                <div class="min-w-0">
+                  <h3 class="text-xl font-medium">{{ property.name }}</h3>
+                  <p class="mt-1 text-sm text-slate-700">Location: {{ property.address }}</p>
+                </div>
+                <div class="shrink-0 text-right">
+                  <p class="text-2xl font-light tracking-normal">{{ formatPrice(property.price) }}</p>
+                  <p class="mt-1 text-xs font-medium text-slate-400">per month</p>
+                </div>
+              </div>
+
+              <div class="mt-5 grid grid-cols-3 gap-2">
+                <span class="inline-flex items-center justify-center gap-1.5 rounded-full bg-[#f2f2f0] px-2 py-2 text-xs font-medium">
+                  <i class="bi bi-door-open text-lg"></i>
+                  {{ property.beds }} Beds
+                </span>
+                <span class="inline-flex items-center justify-center gap-1.5 rounded-full bg-[#f2f2f0] px-2 py-2 text-xs font-medium">
+                  <i class="bi bi-droplet text-lg"></i>
+                  {{ property.baths }} Baths
+                </span>
+                <span class="inline-flex items-center justify-center gap-1.5 rounded-full bg-[#f2f2f0] px-2 py-2 text-xs font-medium">
+                  <i class="bi bi-bounding-box text-lg"></i>
+                  {{ property.area }}
+                </span>
+              </div>
+            </div>
+          </button>
+        </article>
+      } @empty {
+        <div class="bg-white p-5 text-sm text-slate-500">
+          No homes match those filters yet.
+        </div>
+      }
+    </div>
+  </section>
+
+  <section class="hidden p-3 sm:p-4 md:block" id="desktop-home">
+    <div
+      class="relative h-[38vh] min-h-[330px] overflow-hidden rounded-[24px] bg-cover bg-center text-white shadow-2xl shadow-slate-950/15 sm:h-[42vh] lg:h-[48vh] lg:rounded-[34px]"
+      style="background-image: url('https://images.unsplash.com/photo-1600607688969-a5bfcd646154?auto=format&fit=crop&w=1800&q=85');"
+    >
+      <div class="absolute inset-0 bg-slate-950/80 sm:bg-slate-950/60 lg:bg-slate-950/45"></div>
+
+      <header class="absolute inset-x-0 top-0 z-30 flex items-center justify-between p-4 sm:p-5 lg:p-6">
+        <a class="grid size-16 place-items-center" href="#home" (click)="handleNav('home')">
+          <img class="size-16 object-contain brightness-0 invert drop-shadow-lg" src="images/logo.png" alt="Pillow logo" />
+        </a>
+
+        <nav class="hidden rounded-full border border-white/70 bg-white/10 p-1 text-sm backdrop-blur-md md:flex">
+          @for (item of navItems; track item.action) {
+            <button
+              class="rounded-full px-5 py-3 font-medium transition hover:bg-white hover:text-slate-950"
+              [class.bg-white]="isNavActive(item.action)"
+              [class.text-slate-950]="isNavActive(item.action)"
+              [class.text-white]="!isNavActive(item.action)"
+              type="button"
+              (click)="handleNav(item.action)"
+            >
+              {{ item.label }}
+            </button>
+          }
+        </nav>
+
+        <div class="hidden items-center gap-4 pr-8 md:flex lg:pr-12">
+          <a class="inline-flex items-center gap-3 text-base font-medium text-white/95" href="tel:+233241234567">
+            <i class="bi bi-telephone text-lg"></i>
+            +233 24 123 4567
+          </a>
+        </div>
+
+        <button
+          class="grid size-11 place-items-center rounded-full border border-white/60 bg-white/10 text-xl text-white backdrop-blur md:hidden"
+          type="button"
+          aria-label="Open menu"
+          (click)="toggleMobileMenu()"
+        >
+          <i class="bi" [class.bi-list]="!isMobileMenuOpen" [class.bi-x-lg]="isMobileMenuOpen"></i>
+        </button>
+      </header>
+
+      @if (isMobileMenuOpen) {
+        <div class="fixed left-4 right-4 top-24 z-50 rounded-2xl border border-white/20 bg-slate-950/95 p-3 shadow-2xl backdrop-blur md:hidden">
+          @for (item of navItems; track item.action) {
+            <button
+              class="flex w-full items-center justify-between rounded-xl px-4 py-3 text-left text-base font-medium transition"
+              [class.bg-white]="isNavActive(item.action)"
+              [class.text-slate-950]="isNavActive(item.action)"
+              [class.text-white]="!isNavActive(item.action)"
+              type="button"
+              (click)="handleNav(item.action)"
+            >
+              {{ item.label }}
+              @if (item.action === 'contact') {
+                <i class="bi bi-telephone"></i>
+              }
+              @if (item.action === 'list') {
+              <img class="size-5" [class.invert]="!isNavActive(item.action)" src="svgs/Home.svg" alt="" />
+              }
+            </button>
+          }
+          <a class="mt-2 flex items-center gap-2 rounded-xl px-4 py-3 text-sm font-medium text-white/90" href="tel:+233241234567">
+            <i class="bi bi-telephone"></i>
+            +233 24 123 4567
+          </a>
+        </div>
+      }
+
+      <div class="absolute inset-x-0 bottom-0 z-10 flex items-end justify-between gap-4 p-5 sm:p-7 lg:p-8">
+        <div class="min-w-0">
+          <h1 class="max-w-[720px] font-serif text-5xl font-semibold italic leading-[0.9] tracking-normal sm:text-6xl lg:text-7xl">
+            Your Next Place<br />Starts Here
+          </h1>
+          <p class="mt-4 max-w-2xl text-lg font-normal leading-8 text-slate-300 sm:text-xl">
+            Explore verified rentals around you and let us take care of the process from viewing to move-in.
+          </p>
+        </div>
+
+        <button
+          class="hidden shrink-0 items-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-medium text-slate-950 shadow-xl shadow-black/20 transition hover:-translate-y-0.5 sm:inline-flex"
+          type="button"
+          (click)="handleNav('list')"
+        >
+          <img class="size-5" src="svgs/Home.svg" alt="" />
+          List home
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <section class="mx-auto hidden max-w-7xl px-4 py-8 sm:px-6 md:block lg:py-14" id="listings">
+    <div class="mb-6">
+      <h2 class="text-3xl font-semibold tracking-normal text-slate-900 lg:text-4xl">Search properties to rent</h2>
+    </div>
+
+    <div class="mb-9 flex w-full items-center gap-3 rounded-full bg-white p-2">
+      <div class="flex min-w-0 flex-1 items-center gap-3 px-5">
+        <img class="size-7 shrink-0" src="svgs/Search.svg" alt="" />
+        <input class="w-full bg-transparent text-lg outline-none placeholder:text-slate-400" type="search" placeholder="Search location" />
+      </div>
+      <button class="grid size-14 shrink-0 place-items-center rounded-full bg-[#f0f0ee] text-xl" type="button" aria-label="Filters" (click)="openFilters()">
+        <i class="bi bi-sliders2"></i>
+      </button>
+    </div>
+
+    <div class="grid gap-8 md:grid-cols-2 xl:grid-cols-3">
+      @for (property of filteredProperties; track property.slug) {
+        <article class="group overflow-hidden rounded-[30px] bg-white transition hover:-translate-y-1">
+          <button class="block w-full text-left" type="button" (click)="openProperty(property.slug)">
+            <div class="skeleton-surface relative mx-4 mt-4 h-64 overflow-hidden rounded-[26px] bg-[#eee9e2]">
+              <img class="relative z-10 h-full w-full object-cover transition duration-500 group-hover:scale-105" [src]="property.image" [alt]="property.name" />
+            </div>
+
+            <div class="p-5">
+              <div class="flex items-start justify-between gap-4">
+                <div class="min-w-0">
+                  <h3 class="text-2xl font-medium">{{ property.name }}</h3>
+                  <p class="mt-2 line-clamp-2 text-base text-slate-700">Location: {{ property.address }}</p>
+                </div>
+                <div class="shrink-0 text-right">
+                  <p class="text-3xl font-light tracking-normal">{{ formatPrice(property.price) }}</p>
+                  <p class="mt-1 text-sm font-medium text-slate-400">per month</p>
+                </div>
+              </div>
+
+              <div class="mt-6 grid grid-cols-3 gap-2 lg:gap-3">
+                <span class="inline-flex items-center justify-center gap-1.5 rounded-full bg-[#f2f2f0] px-2 py-2.5 text-xs font-medium lg:gap-2 lg:px-3 lg:py-3 lg:text-sm">
+                  <i class="bi bi-door-open text-base lg:text-lg"></i>
+                  {{ property.beds }} Beds
+                </span>
+                <span class="inline-flex items-center justify-center gap-1.5 rounded-full bg-[#f2f2f0] px-2 py-2.5 text-xs font-medium lg:gap-2 lg:px-3 lg:py-3 lg:text-sm">
+                  <i class="bi bi-droplet text-base lg:text-lg"></i>
+                  {{ property.baths }} Baths
+                </span>
+                <span class="inline-flex items-center justify-center gap-1.5 rounded-full bg-[#f2f2f0] px-2 py-2.5 text-xs font-medium lg:gap-2 lg:px-3 lg:py-3 lg:text-sm">
+                  <i class="bi bi-bounding-box text-base lg:text-lg"></i>
+                  {{ property.area }}
+                </span>
+              </div>
+            </div>
+          </button>
+        </article>
+      } @empty {
+        <div class="col-span-full bg-white p-8 text-center text-slate-500">
+          No homes match those filters yet. Try widening the price range or choosing another region.
+        </div>
+      }
+    </div>
+  </section>
+
+  <div
+    class="fixed inset-0 z-50 bg-slate-950/50 backdrop-blur-sm transition-opacity duration-300"
+    [class.opacity-100]="isFilterOpen"
+    [class.pointer-events-auto]="isFilterOpen"
+    [class.opacity-0]="!isFilterOpen"
+    [class.pointer-events-none]="!isFilterOpen"
+  >
+    <button class="absolute inset-0 cursor-default" type="button" aria-label="Close filters" (click)="closeFilters()"></button>
+
+    <aside
+      class="absolute inset-y-0 right-0 flex w-full flex-col bg-white shadow-2xl transition-transform duration-300 ease-out lg:w-[430px]"
+      [class.translate-x-0]="isFilterOpen"
+      [class.translate-x-full]="!isFilterOpen"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Filter listings"
+    >
+      <header class="flex items-center justify-between border-b border-slate-100 px-5 py-4 sm:px-7">
+        <div>
+          <p class="text-sm font-semibold uppercase tracking-wide text-emerald-700">Filters</p>
+          <h2 class="mt-1 text-2xl font-semibold text-slate-950">Refine homes</h2>
+        </div>
+        <button class="grid size-10 place-items-center bg-slate-100 text-slate-700 transition hover:bg-slate-200" type="button" aria-label="Close filters" (click)="closeFilters()">
+          <i class="bi bi-x-lg"></i>
+        </button>
+      </header>
+
+      <div class="flex-1 overflow-y-auto px-5 py-5 sm:px-7">
+        <div class="grid gap-7">
+          <div>
+            <span class="flex items-center justify-between gap-4">
+              <span class="text-sm font-semibold text-slate-700">Bedrooms</span>
+              <span class="text-sm font-medium text-slate-500">{{ bedroomsAny ? 'Any' : minBeds + ' - ' + maxBeds }}</span>
+            </span>
+
+            <div class="mt-4 grid grid-cols-2 gap-3">
+              <button
+                class="px-4 py-3 text-sm font-semibold transition"
+                [class.bg-emerald-700]="bedroomsAny"
+                [class.text-white]="bedroomsAny"
+                [class.bg-slate-100]="!bedroomsAny"
+                [class.text-slate-700]="!bedroomsAny"
+                type="button"
+                (click)="setBedroomsAny()"
+              >
+                Any
+              </button>
+              <button
+                class="px-4 py-3 text-sm font-semibold transition"
+                [class.bg-emerald-700]="!bedroomsAny"
+                [class.text-white]="!bedroomsAny"
+                [class.bg-slate-100]="bedroomsAny"
+                [class.text-slate-700]="bedroomsAny"
+                type="button"
+                (click)="setBedroomRange()"
+              >
+                Range
+              </button>
+            </div>
+
+            <div class="mt-4 grid gap-4" [class.opacity-45]="bedroomsAny">
+              <label class="block">
+                <span class="flex justify-between text-xs font-semibold uppercase tracking-wide text-slate-400">
+                  <span>Min beds</span>
+                  <span>{{ minBeds }}</span>
+                </span>
+                <input class="mt-2 w-full accent-emerald-700" type="range" min="0" max="20" step="1" [(ngModel)]="minBeds" name="minBeds" [disabled]="bedroomsAny" />
+              </label>
+              <label class="block">
+                <span class="flex justify-between text-xs font-semibold uppercase tracking-wide text-slate-400">
+                  <span>Max beds</span>
+                  <span>{{ maxBeds }}</span>
+                </span>
+                <input class="mt-2 w-full accent-emerald-700" type="range" min="0" max="20" step="1" [(ngModel)]="maxBeds" name="maxBeds" [disabled]="bedroomsAny" />
+              </label>
+            </div>
+
+            <div class="mt-2 flex justify-between text-xs font-medium text-slate-400">
+              <span>0</span>
+              <span>20 max</span>
+            </div>
+          </div>
+
+          <div>
+            <div class="flex items-center justify-between gap-4">
+              <span class="text-sm font-semibold text-slate-700">Price range</span>
+              <span class="text-sm font-medium text-slate-500">{{ formatPrice(minPrice) }} - {{ formatPrice(maxPrice) }}</span>
+            </div>
+            <div class="mt-4 grid grid-cols-2 gap-3">
+              <label class="block">
+                <span class="text-xs font-semibold uppercase tracking-wide text-slate-400">Min</span>
+                <input class="mt-2 w-full border border-slate-200 px-3 py-3 outline-none transition focus:border-emerald-600" type="number" min="0" max="20000" step="100" [(ngModel)]="minPrice" name="minPrice" />
+              </label>
+              <label class="block">
+                <span class="text-xs font-semibold uppercase tracking-wide text-slate-400">Max</span>
+                <input class="mt-2 w-full border border-slate-200 px-3 py-3 outline-none transition focus:border-emerald-600" type="number" min="0" max="20000" step="100" [(ngModel)]="maxPrice" name="maxPrice" />
+              </label>
+            </div>
+          </div>
+
+          <div class="relative">
+            <span class="text-sm font-semibold text-slate-700">Region</span>
+            <button class="mt-3 flex w-full items-center justify-between border border-slate-200 bg-white px-3 py-3 text-left outline-none transition hover:border-emerald-600" type="button" (click)="toggleRegionDropdown()">
+              <span>{{ selectedRegion }}</span>
+              <i class="bi bi-chevron-down transition" [class.rotate-180]="isRegionDropdownOpen"></i>
+            </button>
+
+            @if (isRegionDropdownOpen) {
+              <div class="absolute left-0 right-0 top-full z-20 mt-2 max-h-64 overflow-y-auto border border-slate-200 bg-white shadow-2xl">
+                @for (region of ghanaRegions; track region) {
+                  <button
+                    class="flex w-full items-center justify-between px-3 py-3 text-left text-sm transition hover:bg-emerald-50"
+                    [class.bg-emerald-50]="region === selectedRegion"
+                    [class.text-emerald-800]="region === selectedRegion"
+                    [class.font-semibold]="region === selectedRegion"
+                    type="button"
+                    (click)="selectRegion(region)"
+                  >
+                    {{ region }}
+                    @if (region === selectedRegion) {
+                      <i class="bi bi-check2"></i>
+                    }
+                  </button>
+                }
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+
+      <footer class="border-t border-slate-100 px-5 py-4 sm:px-7">
+        <div class="mb-4 text-sm text-slate-500">
+          {{ filteredProperties.length }} {{ filteredProperties.length === 1 ? 'home' : 'homes' }} found
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <button class="border border-slate-200 px-4 py-3 font-semibold text-slate-700 transition hover:border-slate-300" type="button" (click)="resetFilters()">
+            Reset
+          </button>
+          <button class="bg-emerald-700 px-4 py-3 font-semibold text-white transition hover:bg-emerald-800" type="button" (click)="closeFilters()">
+            Show homes
+          </button>
+        </div>
+      </footer>
+    </aside>
+  </div>
+
+  @if (activeModal) {
+    <div class="fixed inset-0 z-50 grid place-items-center bg-slate-950/60 p-2 backdrop-blur-sm sm:p-4" role="dialog" aria-modal="true">
+      <button class="absolute inset-0 cursor-default" type="button" aria-label="Close modal" (click)="closeModal()"></button>
+
+      <section class="relative max-h-[94vh] w-full max-w-3xl overflow-y-auto bg-white p-3 shadow-2xl sm:max-h-[90vh] sm:p-7">
+        <button class="absolute right-3 top-3 grid size-9 place-items-center bg-slate-100 text-slate-700 transition hover:bg-slate-200 sm:right-4 sm:top-4 sm:size-10" type="button" aria-label="Close" (click)="closeModal()">
+          <i class="bi bi-x-lg"></i>
+        </button>
+
+        @if (activeModal === 'contact') {
+          <div class="grid gap-4 lg:grid-cols-[0.9fr_1.1fr] lg:gap-6">
+            <div class="bg-emerald-900 p-4 text-white sm:p-6">
+              <h2 class="font-serif text-3xl font-semibold italic leading-[0.95] tracking-normal sm:text-4xl">Let us help with the next step.</h2>
+              <p class="mt-3 text-sm leading-6 text-emerald-50/80 sm:mt-4 sm:text-base sm:leading-7">
+                Ask about a listing, arrange a viewing, or speak with someone before you move.
+              </p>
+
+              <div class="mt-6 grid gap-3 sm:mt-8 sm:gap-4">
+                <a class="flex items-center gap-3 transition hover:text-emerald-100 sm:gap-4" href="tel:+233241234567">
+                  <span class="grid size-9 place-items-center text-emerald-50 sm:size-11"><i class="bi bi-telephone"></i></span>
+                  <span>
+                    <span class="block text-sm text-emerald-50/70">Call us</span>
+                    <span class="block font-bold">+233 24 123 4567</span>
+                  </span>
+                </a>
+                <a class="flex items-center gap-3 transition hover:text-emerald-100 sm:gap-4" href="mailto:hello@pillow.local">
+                  <span class="grid size-9 place-items-center text-emerald-50 sm:size-11"><i class="bi bi-envelope"></i></span>
+                  <span>
+                    <span class="block text-sm text-emerald-50/70">Email</span>
+                    <span class="block font-bold">hello&#64;pillow.local</span>
+                  </span>
+                </a>
+                <div class="flex items-center gap-3 sm:gap-4">
+                  <span class="grid size-9 place-items-center text-emerald-50 sm:size-11"><i class="bi bi-geo-alt"></i></span>
+                  <span>
+                    <span class="block text-sm text-emerald-50/70">Office</span>
+                    <span class="block font-bold">Navrongo, Ghana</span>
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <form class="grid w-full content-start gap-3 sm:gap-4">
+              <div class="pr-10 sm:pr-12 lg:pr-0">
+                <p class="text-sm font-semibold uppercase tracking-wide text-emerald-700">Enquiry</p>
+                <h3 class="mt-1 text-xl font-extrabold text-slate-950 sm:mt-2 sm:text-2xl">Send a quick message</h3>
+              </div>
+              <label class="block w-full">
+                <span class="text-sm font-semibold text-slate-700">Your name</span>
+                <input class="mt-2 w-full border border-slate-200 px-4 py-3 outline-none transition focus:border-emerald-500" type="text" placeholder="Ama Mensah" />
+              </label>
+              <label class="block w-full">
+                <span class="text-sm font-semibold text-slate-700">Phone or email</span>
+                <input class="mt-2 w-full border border-slate-200 px-4 py-3 outline-none transition focus:border-emerald-500" type="text" placeholder="+233 24 000 0000" />
+              </label>
+              <label class="block w-full">
+                <span class="text-sm font-semibold text-slate-700">Message</span>
+                <textarea class="mt-2 min-h-28 w-full border border-slate-200 px-4 py-3 outline-none transition focus:border-emerald-500 sm:min-h-32" placeholder="Tell us the listing, area, or moving timeline you have in mind."></textarea>
+              </label>
+              <button class="inline-flex w-fit items-center gap-2 bg-emerald-700 px-7 py-3 font-bold text-white shadow-lg shadow-emerald-700/20 transition hover:bg-emerald-800" type="button">
+                <i class="bi bi-send"></i>
+                Send message
+              </button>
+            </form>
+          </div>
+        }
+
+        @if (activeModal === 'list') {
+          <div class="pr-10 sm:pr-12">
+            <p class="text-sm font-semibold uppercase tracking-wide text-emerald-600">Landlords</p>
+            <h2 class="mt-1 text-xl font-extrabold sm:mt-2 sm:text-3xl">List a home</h2>
+            <p class="mt-2 text-sm leading-6 text-slate-500 sm:mt-3 sm:text-base sm:leading-7">Send the basics and we will follow up before publishing anything.</p>
+          </div>
+
+          <form class="mt-5 grid gap-3 sm:mt-7 sm:gap-4 md:grid-cols-2">
+            <label class="block">
+              <span class="text-sm font-semibold text-slate-700">Full name</span>
+              <input class="mt-2 w-full border border-slate-200 px-4 py-3 outline-none transition focus:border-emerald-500" type="text" placeholder="Ama Mensah" />
+            </label>
+            <label class="block">
+              <span class="text-sm font-semibold text-slate-700">Phone number</span>
+              <input class="mt-2 w-full border border-slate-200 px-4 py-3 outline-none transition focus:border-emerald-500" type="tel" placeholder="+233 24 000 0000" />
+            </label>
+            <label class="block">
+              <span class="text-sm font-semibold text-slate-700">Email</span>
+              <input class="mt-2 w-full border border-slate-200 px-4 py-3 outline-none transition focus:border-emerald-500" type="email" placeholder="you@example.com" />
+            </label>
+            <label class="block">
+              <span class="text-sm font-semibold text-slate-700">Property location</span>
+              <input class="mt-2 w-full border border-slate-200 px-4 py-3 outline-none transition focus:border-emerald-500" type="text" placeholder="East Legon, Accra" />
+            </label>
+            <label class="block">
+              <span class="text-sm font-semibold text-slate-700">Monthly rent</span>
+              <input class="mt-2 w-full border border-slate-200 px-4 py-3 outline-none transition focus:border-emerald-500" type="text" placeholder="GHS 4,500" />
+            </label>
+            <label class="block">
+              <span class="text-sm font-semibold text-slate-700">Bedrooms and bathrooms</span>
+              <input class="mt-2 w-full border border-slate-200 px-4 py-3 outline-none transition focus:border-emerald-500" type="text" placeholder="3 bedrooms, 2 bathrooms" />
+            </label>
+            <label class="block md:col-span-2">
+              <span class="text-sm font-semibold text-slate-700">Property details</span>
+              <textarea class="mt-2 min-h-28 w-full border border-slate-200 px-4 py-3 outline-none transition focus:border-emerald-500" placeholder="Tell us about the home, availability, amenities, and preferred viewing times."></textarea>
+            </label>
+            <button class="inline-flex w-fit items-center gap-2 bg-emerald-600 px-7 py-3 font-bold text-white shadow-lg shadow-emerald-600/20 transition hover:bg-emerald-700" type="button">
+              <i class="bi bi-send"></i>
+              Send request
+            </button>
+          </form>
+        }
+      </section>
+    </div>
+  }
+</main>
